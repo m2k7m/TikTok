@@ -67,21 +67,29 @@ def TikTok(username: str) -> None:
         else datetime.fromtimestamp(uniqueIdModifyTime)
     )
 
+    is_verified = "Yes" if user.get("verified") else "No"
+    is_private = "Yes" if user.get("privateAccount") else "No"
+    can_see_following_list = (
+        "Yes" if user.get("followingVisibility", "Unknown") == 1 else "No"
+    )
+    open_favorite = "Yes" if user.get("openFavorite") else "No"
+
     print(f"[/] Get TikTok Info For @{username}..")
+
     response = (
         f"[+] Username: {user.get('uniqueId')}\n"
         f"[+] UserID: {url_id}\n"
         f"[+] Nickname: {user.get('nickname')}\n"
         f"[+] Bio:\n{user.get('signature')}\n"
-        f"[+] Is Verified: {'Yes' if user.get('verified') else 'No'}\n"
-        f"[+] Is Private: {'Yes' if user.get('privateAccount') else 'No'}\n"
+        f"[+] Is Verified: {is_verified}\n"
+        f"[+] Is Private: {is_private}\n"
         f"[+] Followers: {format_numbers(json_data['stats']['followerCount'])}\n"
         f"[+] Following: {format_numbers(json_data['stats']['followingCount'])}\n"
         f"[+] Friends: {format_numbers(json_data['stats']['friendCount'])}\n"
         f"[+] Video Count: {format_numbers(json_data['stats']['videoCount'])}\n"
         f"[+] Likes: {format_numbers(json_data['stats']['heart'])}\n"
-        f"[+] Can See Following List: {"Yes" if user.get("followingVisibility", "Unknown") == 1 else "No"}\n"
-        f"[+] Open Favorite: {'Yes' if user.get('openFavorite') else 'No'}\n"
+        f"[+] Can See Following List: {can_see_following_list}\n"
+        f"[+] Open Favorite: {open_favorite}\n"
         f"[+] User Language: {user.get('language')}\n"
         f"[+] User Create Time: {creation_date}\n"
         f"[+] Last Time Change Nickname: {last_change_name}\n"
@@ -89,6 +97,7 @@ def TikTok(username: str) -> None:
         f"[+] Account Region: {user.get('region')}\n"
         f"[+] Avatar Link: {user.get('avatarLarger')}\n"
     )
+
     print(response)
     input("[ + ] Done Sir ..")
 
