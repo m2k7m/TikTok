@@ -24,7 +24,7 @@ def TikTok(username: str) -> None:
     """
 
     match = re.search(r"@([^/?#]+)", username)
-    username = match.group(1)
+    username = match.group(1) if match else username
 
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 GIVT"
