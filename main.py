@@ -1,4 +1,3 @@
-
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -6,14 +5,16 @@ import requests
 import json
 import re
 
+
 def format_numbers(num: int) -> str:
     if num >= 1000000:
-        return str(num // 1000000) + 'M'
+        return str(num // 1000000) + "M"
     elif num >= 1000:
-        return str(num // 1000) + 'K'
+        return str(num // 1000) + "K"
     else:
         return str(num)
-    
+
+
 def TikTok(username: str) -> None:
     """Get TikTok account info
 
@@ -22,22 +23,26 @@ def TikTok(username: str) -> None:
             pass username with or without "@" or pass link.
     """
 
-    match = re.search(r'@([^/?#]+)', username)
+    match = re.search(r"@([^/?#]+)", username)
     username = match.group(1)
 
-    headers = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 GIVT"}
+    headers = {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 GIVT"
+    }
     r = requests.get(f"https://www.tiktok.com/@{username}", headers=headers)
 
     try:
-        soup = BeautifulSoup(r.text, 'html.parser')
-        script_tag = soup.find('script', {'id': '__UNIVERSAL_DATA_FOR_REHYDRATION__'})
+        soup = BeautifulSoup(r.text, "html.parser")
+        script_tag = soup.find("script", {"id": "__UNIVERSAL_DATA_FOR_REHYDRATION__"})
         script_text = script_tag.text.strip()
-        json_data = json.loads(script_text)["__DEFAULT_SCOPE__"]["webapp.user-detail"]["userInfo"]
+        json_data = json.loads(script_text)["__DEFAULT_SCOPE__"]["webapp.user-detail"][
+            "userInfo"
+        ]
     except:
         input("[X] Error : Username Not Found .")
-    
+
     user = json_data["user"]
-    
+
     url_id = int(user["id"])
     binary = "{0:b}".format(url_id)
     i = 0
@@ -49,10 +54,18 @@ def TikTok(username: str) -> None:
     creation_date = datetime.fromtimestamp(timestamp)
 
     nickNameModifyTime = user.get("nickNameModifyTime", "Never")
-    last_change_name = "Never" if nickNameModifyTime == 0 else datetime.fromtimestamp(nickNameModifyTime)
+    last_change_name = (
+        "Never"
+        if nickNameModifyTime == 0
+        else datetime.fromtimestamp(nickNameModifyTime)
+    )
 
     uniqueIdModifyTime = user.get("uniqueIdModifyTime", "Never")
-    last_change_username = "Never" if uniqueIdModifyTime == 0 else datetime.fromtimestamp(uniqueIdModifyTime)
+    last_change_username = (
+        "Never"
+        if uniqueIdModifyTime == 0
+        else datetime.fromtimestamp(uniqueIdModifyTime)
+    )
 
     print(f"[/] Get TikTok Info For @{username}..")
     response = (
@@ -76,9 +89,9 @@ def TikTok(username: str) -> None:
         f"[+] Account Region: {user.get('region')}\n"
         f"[+] Avatar Link: {user.get('avatarLarger')}\n"
     )
-
     print(response)
     input("[ + ] Done Sir ..")
+
 
 print("\n")
 username = input("[?] Enter a username or link: ")
